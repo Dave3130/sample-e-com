@@ -17,7 +17,8 @@ describe('9ABF-01', function () {
   it('shows expected delivery info', async () => {
     await commands.click('[data-testid="tab-delivery"]');
     const panel = await commands.get('[data-testid="panel-delivery"]');
+    await panel.waitForExist();
     const txt = await panel.getText();
-    expect(txt).to.contain('3–5 days');
+    expect(txt).to.contain('3\u20135 days');
   });
 });
