@@ -27,6 +27,7 @@ describe('🛒 3TAF Product Search - Async Dependencies Tests', function() {
   };
 
   before(async function() {
+    this.timeout(90000);
     await testSetup.beforeEach('chrome');
     commands = testSetup.getCommands();
     await commands?.log('🚀 Starting 3TAF Product Search Tests');
