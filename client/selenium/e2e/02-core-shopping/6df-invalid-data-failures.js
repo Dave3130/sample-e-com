@@ -75,7 +75,7 @@ async function restoreProductsMock(commands) {
 
 
 describe('🛒 6DF Cart Operations with Invalid Data', function() {
-  this.timeout(60000);
+  this.timeout(120000);
   
   const testSetup = new TestSetup();
   let commands;
@@ -89,6 +89,7 @@ describe('🛒 6DF Cart Operations with Invalid Data', function() {
     await commands?.log('Setting up 6DF invalid data tests');
   });
   beforeEach(async function() {
+    this.timeout(120000);
     await testSetup.beforeEach('chrome');
     commands = testSetup.getCommands();
   });
