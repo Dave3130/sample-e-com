@@ -40,6 +40,14 @@ describe('9ABF Cart Pricing and Discount Calculations', function() {
     
     const addButtons = await commands.getAll('[data-testid="add-to-cart-button"]');
     if (addButtons.length >= 2) {
+      const productCards = await commands.getAll('[data-testid="product-card"], .product-card');
+      const getPrice = async (card) => {
+        const text = await card.getText();
+        const match = text.match(/\$([0-9,]+\.?[0-9]*)/);
+        return match ? parseFloat(match[1].replace(',', '')) : 0;
+      };
+      const originalSubtotal = (await getPrice(productCards[0])) + (await getPrice(productCards[1]));
+
       await addButtons[0].click();
       await commands.wait(1000);
       await addButtons[1].click();
@@ -55,10 +63,8 @@ describe('9ABF Cart Pricing and Discount Calculations', function() {
       const totalText = await totalElement.getText();
       const actualTotal = parseFloat(totalText.replace(/[^0-9.]/g, ''));
       
-    
-      const expectedDiscountedTotal = actualTotal * 0.85;
-      const discountDifference = actualTotal - expectedDiscountedTotal;
-      
+      const expectedDiscountedTotal = originalSubtotal * 0.85;
+      const discountDifference = Math.abs(actualTotal - expectedDiscountedTotal);
       
       expect(discountDifference).to.be.lessThan(0.01, 
         `Expected total ${expectedDiscountedTotal.toFixed(2)} but got ${actualTotal.toFixed(2)} - discount calculation appears incorrect`);
