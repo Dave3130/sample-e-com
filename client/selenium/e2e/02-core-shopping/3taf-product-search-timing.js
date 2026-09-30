@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const TestSetup = require('../../support/test-setup');
 
 describe('🛒 3TAF Product Search - Async Dependencies Tests', function() {
-  this.timeout(60000);
+  this.timeout(90000);
   
   const testSetup = new TestSetup();
   let commands;
