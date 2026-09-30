@@ -25,21 +25,17 @@ describe('🛒 1ELF Core Shopping - Product Discovery', function() {
   describe('1ELF Product Listing', function() {
     it('1ELF should display products with unstable DOM structure selectors', async function() {
       await commands.visit('/products');
-      
-      // FRAGILE: Uses complex XPath that depends on exact DOM hierarchy
-      await commands.shouldBeVisible('//main[@role="main"]/div[@class and contains(@class, "container")]/div[position()=last()]');
+
+      await commands.shouldBeVisible('[data-testid="products-container"]');
       await commands.waitForProductsToLoad();
-      
-      // FRAGILE: Targets elements based on their position in DOM tree that could change
-      const productCards = await commands.getAll('div[class*="grid"] > div:nth-child(n+1):nth-child(-n+12)');
-      
+
+      const productCards = await commands.getAll('[data-testid="product-card"]');
+
       if (productCards.length > 0) {
-        // FRAGILE: Assumes specific nested structure for product name and price
-        await commands.shouldBeVisible('div[class*="grid"] div:nth-child(1) h3:first-of-type');
-        await commands.shouldBeVisible('div[class*="grid"] div:nth-child(1) span[class*="price"]:first-child');
-        
-        // FRAGILE: Uses brittle XPath that breaks with CSS class name changes
-        const prices = await commands.getAll('//div[contains(@class, "price") or contains(@class, "Price")]/following-sibling::* | //span[starts-with(text(), "$")]');
+        await commands.shouldBeVisible('[data-testid="product-card"]:first-of-type h3');
+        await commands.shouldBeVisible('[data-testid="product-price"]:first-of-type');
+
+        const prices = await commands.getAll('[data-testid="product-price"]');
         for (const price of prices) {
           const priceText = await price.getText();
           expect(priceText).to.include('$', 'Price should include currency symbol');
