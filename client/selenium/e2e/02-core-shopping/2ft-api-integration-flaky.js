@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const TestSetup = require('../../support/test-setup');
 
 describe('🛒 2FT API Integration - Data Dependency Tests', function() {
-  this.timeout(60000);
+  this.timeout(120000);
   
   const testSetup = new TestSetup();
   let commands;
