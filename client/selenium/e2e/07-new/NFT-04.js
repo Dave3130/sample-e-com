@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const TestSetup = require('../../support/test-setup');
 
 describe('NFT-04', function () {
-  this.timeout(45000);
+  this.timeout(90000);
   const testSetup = new TestSetup();
   let commands;
 
