@@ -90,11 +90,19 @@ describe('🛒 2FT API Integration - Data Dependency Tests', function() {
           expect(hasNoResultsMessage).to.be.true;
         }
         
-        // FLAKY: Clear search and verify original products return
+        // Clear search and wait dynamically for the product list to refresh,
+        // instead of guessing a fixed delay (this was the flaky root cause).
         await searchInputs[0].clear();
-        await commands.wait(1000); // May be insufficient for search clear + API call
-        
-        const clearedResults = await commands.getAll('[data-testid="product-card"]');
+
+        let clearedResults = await commands.getAll('[data-testid="product-card"]');
+        const clearTimeoutMs = 5000;
+        const clearPollIntervalMs = 250;
+        const clearStart = Date.now();
+        while (clearedResults.length <= searchResults.length && (Date.now() - clearStart) < clearTimeoutMs) {
+          await commands.wait(clearPollIntervalMs);
+          clearedResults = await commands.getAll('[data-testid="product-card"]');
+        }
+
         expect(clearedResults.length).to.be.greaterThan(searchResults.length, 
           'Clearing search should show more products');
           
